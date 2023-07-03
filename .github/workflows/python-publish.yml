@@ -62,10 +62,7 @@ jobs:
       uses: actions/setup-python@v3    
       with:
         python-version: '3.x'      
-#     - name: Set up Python
-#       uses: actions/setup-python@v2
-#       with:
-#         python-version: 3.8
+
 
     - name: Install dependencies
       run: |
@@ -78,6 +75,7 @@ jobs:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
+        export build_number=${{github.run_number}}
         python setup.py sdist bdist_wheel
         twine upload dist/*
 
