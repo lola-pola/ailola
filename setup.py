@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-
-
+import random
+build_number = os.environ.get("build_number", str(random.randint(0, 9999)) )
 setup(
     name='ailola',
-    version='0.9.0',
+    version=f'0.9.{build_number}',
     license='MIT',
     author="Elhay Efrat",
     author_email='elhayefrat@gmail.com',
