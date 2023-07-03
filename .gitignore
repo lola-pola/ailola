@@ -5,6 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
+*dist-info
+dist
+src/*.egg-info
+
 
 # Distribution / packaging
 .Python
