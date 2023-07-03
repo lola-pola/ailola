@@ -1,5 +1,8 @@
 # ailola app
 
+[![PyPI](https://img.shields.io/pypi/v/ailola.svg)](https://pypi.org/project/ailola/)
+
+
 This is a Python command-line application that utilizes OpenAI's Chat API to generate and validate Terraform HCL (HashiCorp Configuration Language) templates. It provides two main functionalities:
 
 Terraform HCL Generation: Given a query, the application generates valid Terraform HCL templates. It can generate templates with or without provider information, depending on the specified provider.
