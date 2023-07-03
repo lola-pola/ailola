@@ -23,7 +23,7 @@ def create_terraform(query,provider,temperature):
         messages = [{"role":"system","content":"You are a file name generator, only generate valid names for Terraform templates, \
                     You are a Terraform HCL generator, only generate valid Terraform HCL without provider \
                         templates."},{"role":"user","content":query}],
-        temperature=1,
+        temperature=temperature,
         stop=None)
     else:
         response = openai.ChatCompletion.create(
@@ -31,7 +31,7 @@ def create_terraform(query,provider,temperature):
         messages = [{"role":"system","content":"You are a file name generator, only generate valid names for Terraform templates, \
                     You are a Terraform HCL generator, only generate valid Terraform HCL \
                         templates."},{"role":"user","content":query}],
-        temperature=1,
+        temperature=temperature,
         stop=None)
     
     return str(response['choices'][0]['message']['content'])
@@ -56,7 +56,7 @@ def validate_terraform(query,provider,temperature):
         messages = [{"role":"system","content":"You are a file name validator, only validate Terraform templates, \
                     You are a Terraform HCL validator and suggest security changes and terraform changes \
                         templates."},{"role":"user","content":query}],
-        temperature=1,
+        temperature=temperature,
         stop=None)
     else:
         response = openai.ChatCompletion.create(
@@ -64,7 +64,7 @@ def validate_terraform(query,provider,temperature):
         messages = [{"role":"system","content":"You are a file name validator, only validate Terraform templates, \
                     You are a Terraform HCL validator \
                         templates."},{"role":"user","content":query}],
-        temperature=1,
+        temperature=temperature,
         stop=None)
     
     return str(response['choices'][0]['message']['content'])
@@ -78,7 +78,7 @@ def validate_terraform(query,provider,temperature):
 @click.option('--data', type=(str))
 @click.option('--validate',type=(str))
 @click.option('--provider', required=True, type=(str),default="azure")
-@click.option('--temperature', type=(int),default=1)
+@click.option('--temperature', type=(float),default=1.0)
 def cli(data,provider,validate,temperature):
     if validate:
         with open(validate, 'r') as f:
