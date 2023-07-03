@@ -79,3 +79,4 @@ Make sure to review the output and use it accordingly in your Terraform infrastr
 
 ## Conclusion
 This application leverages OpenAI's powerful language model to generate and validate Terraform HCL templates. It provides a convenient command-line interface to interact with the functionality. Feel free to customize and extend the application based on your specific requirements.
+
