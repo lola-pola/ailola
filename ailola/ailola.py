@@ -120,7 +120,8 @@ def cli(data,provider,validate,temperature, debug):
 
     elif debug:
         res = requests.get(debug)
-        debug_url(query=res.text(),provider=provider,temperature=temperature)
+        res = debug_url(query=res.text,provider=provider,temperature=temperature)
+        click.echo(Fore.YELLOW +str(res))
     else:
         res = create_terraform(query=data,provider=provider,temperature=temperature)
         click.echo(Fore.BLUE +str(res))
