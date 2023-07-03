@@ -2,6 +2,13 @@
 
 [![PyPI](https://img.shields.io/pypi/v/ailola.svg)](https://pypi.org/project/ailola/)
 
+https://github.com/lola-pola/ailola/actions/workflows/dependabot/badge.svg
+
+
+
+
+![build status]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://github.com/lola-pola/ailola/actions/workflows/python-publish/badge.svg))
+
 
 This is a Python command-line application that utilizes OpenAI's Chat API to generate and validate Terraform HCL (HashiCorp Configuration Language) templates. It provides two main functionalities:
 
