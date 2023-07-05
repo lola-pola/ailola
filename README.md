@@ -1,4 +1,11 @@
-# ailola app
+# Ailola
+
+Ailola is a command-line tool that uses OpenAI's GPT-3 to generate relevant prompts for infrastructure-as-code templates for Terraform and Kubernetes.
+
+## Installation
+
+To install Ailola, run the following command:
+
 
 [![PyPI](https://img.shields.io/pypi/v/ailola.svg)](https://pypi.org/project/ailola/)
 
