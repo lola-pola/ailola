@@ -143,6 +143,7 @@ def cli(create_terraform,provider,
             --linux_help "how do i run loop for all files in directory and echo + addding the word test" \n\
             --debug_linux "im getting this error `cat /var/log/system.log`"\n\
             --file_name "create a file name from date time"\n\
+            --create_web "create simple web page"\n\
             --ask "create a script that find the oldest file in dir in bash and in python"\n'
 
         click.echo(Fore.YELLOW +str(res))
