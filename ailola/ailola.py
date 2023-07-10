@@ -50,12 +50,15 @@ def general_prompt(general_query,provider,temperature):
 @click.option('--debug_linux',type=(str))
 @click.option('--ask',type=(str))
 @click.option('--create_file',type=(str))
+@click.option('--create_web',type=(str))
+
+
 def cli(create_terraform,provider,
         validate_terraform,temperature,
         debug_url,create_k8s,
         model,debug_linux,
         linux_help,ask,
-        create_file):
+        create_file,create_web):
     
     def get_relevant(key,query):
         prompt = {'create_terraform':[{"role":"system","content":"You are a file name generator, only generate valid names for Terraform templates,You are a Terraform HCL generator, only generate valid Terraform HCL templates."},{"role":"user","content":query}],
@@ -64,6 +67,7 @@ def cli(create_terraform,provider,
                   'debug_url' : [{"role":"system","content":"You are a validator for jenkins, only validate jenkins console log, \You are a Jenkins validator and debug current console "},{"role":"user","content":query}],
                   'debug_linux' : [{"role":"system","content":"You are a debugger for linux, only debugger linux commands, \You are a linux debugger "},{"role":"user","content":query}],
                   'linux_help' : [{"role":"system","content":"You are a linux command line expert, only answer linux commands, \You are a linux coomand line expert  "},{"role":"user","content":query}],
+                  'create_web' : [{"role":"system","content":"You are a web creator command line expert, only answer web examples with all user requests "},{"role":"user","content":query}],
                   'ask' : [{"role":"system","content":"You are a dev and devops expert, only answer dev and devops answers, \You are a dev and devops expert  "},{"role":"user","content":query}]
 
               }
@@ -81,7 +85,6 @@ def cli(create_terraform,provider,
             click.echo(Fore.YELLOW +str(res))
             if create_file:
                 create_file_from_output(res,create_file)
-
     elif debug_url:
         res = requests.get(debug_url)
         res = general_prompt(general_query=get_relevant(key="debug_url",query=res.text),provider=provider,temperature=temperature)
@@ -94,7 +97,11 @@ def cli(create_terraform,provider,
         click.echo(Fore.GREEN +str(res))  
         if create_file:
             create_file_from_output(res,create_file)    
-          
+    elif create_web:
+        res = general_prompt(general_query=get_relevant(key="create_web",query=create_web),provider=provider,temperature=temperature)
+        click.echo(Fore.BLUE +str(res))  
+        if create_file:
+            create_file_from_output(res,create_file)             
     elif create_k8s:
         res = general_prompt(general_query=get_relevant(key="create_k8s",query=create_k8s),provider=provider,temperature=temperature)
         click.echo(Fore.BLUE +str(res))
