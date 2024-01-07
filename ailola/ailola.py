@@ -1,45 +1,38 @@
 #!/usr/bin/python
-
 import os
 import click
-import openai
 import colorama
 import requests
 from datetime import datetime
+from openai import AzureOpenAI
 from colorama import Fore, Style
 
 
 
+
 def general_prompt(general_query,provider,temperature):
-    if provider == "azure":
-        openai.api_type = "azure"
-        openai.api_base = os.getenv("OPENAI_API_BASE")
-        openai.api_version = "2023-03-15-preview"
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        engine =  os.getenv("OPENAI_ENGINE")
-    else:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        engine =  os.getenv("OPENAI_ENGINE")
-    if provider == "azure":   
-        response = openai.ChatCompletion.create(
-        engine=engine,
-        messages = general_query,
-        temperature=temperature,
-        stop=None)
-    else:
-        response = openai.ChatCompletion.create(
-        model=engine,
-        messages = general_query,
-        temperature=temperature,
-        stop=None)
-    
-    return str(response['choices'][0]['message']['content'])
+    open_ai_model =  os.getenv("OPENAI_ENGINE","gpt-35-turbo-16k")
+    api_version = os.getenv("API_VERSION","2023-07-01-preview")
+    openai_api_base = os.getenv("OPENAI_AI_BASE","https://x.x.x/")
+    model_temperature = os.getenv("TEMPERATURE",0.8)
+    client = AzureOpenAI(
+                api_version=api_version,
+                azure_endpoint=openai_api_base,
+                api_key= os.getenv("OPENAI_API_KEY")
+        )
+    response = client.chat.completions.create(
+            model=open_ai_model,
+            messages=general_query,
+            temperature=model_temperature,
+        )
+    return response.choices[0].message.content
 
 
 
 
 @click.command()
 @click.option('--create_terraform', type=(str))
+@click.option('--create_terraform_cdk', type=(str))
 @click.option('--validate_terraform',type=(str))
 @click.option('--linux_help',type=(str))
 @click.option('--debug_url',type=(str))
@@ -53,7 +46,7 @@ def general_prompt(general_query,provider,temperature):
 @click.option('--create_web',type=(str))
 
 
-def cli(create_terraform,provider,
+def cli(create_terraform, create_terraform_cdk,provider,
         validate_terraform,temperature,
         debug_url,create_k8s,
         model,debug_linux,
@@ -62,6 +55,7 @@ def cli(create_terraform,provider,
     
     def get_relevant(key,query):
         prompt = {'create_terraform':[{"role":"system","content":"You are a file name generator, only generate valid names for Terraform templates,You are a Terraform HCL generator, only generate valid Terraform HCL templates."},{"role":"user","content":query}],
+                  'create_terraform_cdk':[{"role":"system","content":"You are a Terraform CDK generator , only generator valid Terraform CDK code."},{"role":"user","content":query}],
                   'validate_terraform':[{"role":"system","content":"You are a Terraform HCL validator, only validate valid Terraform HCL templates."},{"role":"user","content":query}],
                   'create_k8s':[{"role":"system","content":"You are a k8s template generator, only generate valid k8s templates."},{"role":"user","content":query}],
                   'debug_url' : [{"role":"system","content":"You are a validator for jenkins, only validate jenkins console log, \You are a Jenkins validator and debug current console "},{"role":"user","content":query}],
@@ -119,7 +113,11 @@ def cli(create_terraform,provider,
         click.echo(Fore.BLUE +str(res))
         if create_file:
             create_file_from_output(res,create_file)
-
+    elif create_terraform_cdk:    
+        res = general_prompt(general_query=get_relevant(key="create_terraform_cdk",query=create_terraform_cdk),provider=provider,temperature=temperature)
+        click.echo(Fore.BLUE +str(res))
+        if create_file:
+            create_file_from_output(res,create_file)
     elif ask:    
         res = general_prompt(general_query=get_relevant(key="ask",query=ask),provider=provider,temperature=temperature)
         click.echo(Fore.BLUE +str(res))
