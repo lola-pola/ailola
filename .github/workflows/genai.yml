@@ -1,0 +1,14 @@
+name: PR recommendations description
+on:
+  pull_request:
+    types: ['opened','reopened','synchronize']
+jobs:
+  openai-pr-description:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: lola-pola/code-recommendations@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          openai_api_base: ${{ secrets.OPENAI_API_BASE }}
+          
