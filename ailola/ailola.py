@@ -6,10 +6,6 @@ import requests
 from datetime import datetime
 from openai import AzureOpenAI
 from colorama import Fore, Style
-
-
-
-
 def general_prompt(general_query,provider,temperature):
     open_ai_model =  os.getenv("OPENAI_ENGINE","gpt-35-turbo-16k")
     api_version = os.getenv("API_VERSION","2023-07-01-preview")
@@ -26,10 +22,6 @@ def general_prompt(general_query,provider,temperature):
             temperature=model_temperature,
         )
     return response.choices[0].message.content
-
-
-
-
 @click.command()
 @click.option('--create_terraform', type=(str))
 @click.option('--create_terraform_cdk', type=(str))
@@ -44,15 +36,12 @@ def general_prompt(general_query,provider,temperature):
 @click.option('--ask',type=(str))
 @click.option('--create_file',type=(str))
 @click.option('--create_web',type=(str))
-
-
 def cli(create_terraform, create_terraform_cdk,provider,
         validate_terraform,temperature,
         debug_url,create_k8s,
         model,debug_linux,
         linux_help,ask,
         create_file,create_web):
-    
     def get_relevant(key,query):
         prompt = {'create_terraform':[{"role":"system","content":"You are a file name generator, only generate valid names for Terraform templates,You are a Terraform HCL generator, only generate valid Terraform HCL templates."},{"role":"user","content":query}],
                   'create_terraform_cdk':[{"role":"system","content":"You are a Terraform CDK generator , only generator valid Terraform CDK code."},{"role":"user","content":query}],
@@ -101,13 +90,11 @@ def cli(create_terraform, create_terraform_cdk,provider,
         click.echo(Fore.BLUE +str(res))
         if create_file:
             create_file_from_output(res,create_file)
-        
     elif linux_help:    
         res = general_prompt(general_query=get_relevant(key="linux_help",query=linux_help),provider=provider,temperature=temperature)
         click.echo(Fore.BLUE +str(res))
         if create_file:
             create_file_from_output(res,create_file)
-
     elif create_terraform:    
         res = general_prompt(general_query=get_relevant(key="create_terraform",query=create_terraform),provider=provider,temperature=temperature)
         click.echo(Fore.BLUE +str(res))
@@ -123,7 +110,6 @@ def cli(create_terraform, create_terraform_cdk,provider,
         click.echo(Fore.BLUE +str(res))
         if create_file:
             create_file_from_output(res,create_file)
-  
     else:
         res = 'Before you start please make sure you have the following env variables: \n \
            export OPENAI_ENGINE=GPT3\n\
