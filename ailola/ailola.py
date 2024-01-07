@@ -131,8 +131,6 @@ def cli(create_terraform, create_terraform_cdk,provider,
             --ask "create a script that find the oldest file in dir in bash and in python"\n'
 
         click.echo(Fore.YELLOW +str(res))
-
-    
     
 if __name__ == '__main__':
     cli()
